@@ -27,10 +27,11 @@ main{padding:12px;max-width:1100px;margin:auto}
 <h1>じゅーすじゅーす女学院　座席表メーカー</h1>
 <div class="subtitle">みんなで妄想して楽しんでね！</div>
 <div class="hint">入れ替えたい写真または空席を2か所タップすると、座席を交換できます。</div>
-<div class="update-info"><strong>アップデート情報</strong><br>更新日：2026.09.21<br>・縦2列／縦3列を切り替えられるようにしました。<br>・メンバーの画像バランスを調整しました。<br><br>【2026.09.20】<br>・下段左端に空席を追加しました。<br>・空席も写真と同じように選択・入れ替えできます。<br>・空席を好きな位置へ移動して、自由に配置を変更できます。</div>
+<div class="update-info"><strong>アップデート情報</strong><br>更新日：2026.09.21<br>・シャッフル機能を追加しました。<br>・縦2列／縦3列を切り替えられるようにしました。<br>・メンバーの画像バランスを調整しました。<br><br>【2026.09.20】<br>・下段左端に空席を追加しました。<br>・空席も写真と同じように選択・入れ替えできます。<br>・空席を好きな位置へ移動して、自由に配置を変更できます。</div>
 <div class="controls">
 <div class="primary-actions">
 <button id="reset">配置をリセット</button>
+<button id="shuffle" class="secondary">シャッフル</button>
 <button id="save" class="secondary">画像として保存</button>
 <button id="share" class="secondary">共有</button>
 </div>
@@ -157,6 +158,19 @@ document.getElementById('reset').onclick=()=>{
   seatMembers = (currentLayout === '3' ? defaultSeatMembers3 : defaultSeatMembers2).slice();
   render();
   status.textContent='元の配置に戻しました。';
+};
+
+document.getElementById('shuffle').onclick=()=>{
+  selectedSeatIndex = null;
+  // 現在のモードの12席（11人＋空席1つ）をランダムに並べ替える
+  const shuffled = (currentLayout === '3' ? defaultSeatMembers3 : defaultSeatMembers2).slice();
+  for(let i=shuffled.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+  }
+  seatMembers=shuffled;
+  render();
+  status.textContent='座席をランダムにシャッフルしました。';
 };
 
 document.getElementById('save').onclick=async()=>{
